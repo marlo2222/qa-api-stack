@@ -1,0 +1,27 @@
+            <plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<version>1.5.0</version>
+				<configuration>
+					{% if target %}
+					<targetClasses>
+						<param>{{targetClass}}</param>
+					</targetClasses>
+					<targetTests>
+						<param>{{targetTests}}</param>
+					</targetTests>
+					{% endif %}
+					<mutators>
+						<mutator>DEFAULTS</mutator>
+					</mutators>
+					<outputFormats>
+            			<outputFormat>HTML</outputFormat>
+            			<outputFormat>XML</outputFormat>
+        			</outputFormats>
+					<failWhenNoMutations>false</failWhenNoMutations>
+					<avoidCallsTo>
+						<avoidCallsTo>{{ lib_log }}</avoidCallsTo>
+					</avoidCallsTo>
+					<mutationThreshold>{{ mutation_coverage }}</mutationThreshold>
+				</configuration>
+			 </plugin>

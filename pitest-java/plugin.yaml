@@ -1,0 +1,71 @@
+name: pitest-java
+description: Plugin para a configuração de testes de mutação com a ferramenta pitest em projetos java.
+display-name: pitest-java
+picture: plugin.png
+category: backend
+compatibility:
+  - java
+about: docs/about.md
+usage: docs/usage.md
+use-case: docs/use-case.md
+implementation: docs/implementation.md
+technologies:
+  - "Java"
+  - "Maven"
+types:
+  - app
+inputs:
+  - label: Qual gerenciador de dependenciais do projeto?
+    type: text
+    name: gerenciador
+    required: true
+    items:
+      - Maven
+      - Gradle
+  - label: Qual lib de logs utilizada no projeto?
+    type: text
+    name: lib_log
+    required: true
+    items:
+      - java.util.logging
+      - org.apache.log4j
+      - org.slf4j
+      - org.apache.commons.logging
+  - label: Qual cobertura de mutantes esperada?(1% a 99%)
+    type: int
+    name: mutation_coverage
+    required: true
+    pattern: "\b([1-9]|[1-9][0-9])\b"
+  - label: Gostaria de definir os targetClass e targetTests?(opcional)
+    type: bool
+    name: target
+    default: false
+  - label: Informe o pacote das classes a serem gerados mutantes...
+    type: text
+    name: targetClass
+    required: true
+    condition:
+      variable: target
+      operator: "=="
+      value: true
+  - label: Informe o pacote dos testes unitarios...
+    type: text
+    name: targetTests
+    required: true
+    condition:
+      variable: target
+      operator: "=="
+      value: true
+
+hooks:
+  type: edit
+  trigger: after-render
+  path: "pom.xml"
+  changes:
+    - search:
+      pattern: "plugins"
+      insert-after: 
+        snippet: snippets/plugin.txt
+      when:
+      not-exists: "org.pitest"
+  
