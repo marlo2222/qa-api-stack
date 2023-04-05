@@ -56,16 +56,4 @@ inputs:
       variable: target
       operator: "=="
       value: true
-
-hooks:
-  type: edit
-  trigger: after-render
-  path: "pom.xml"
-  changes:
-    - search:
-      pattern: "plugins"
-      insert-after: 
-        snippet: snippets/plugin.txt
-      when:
-      not-exists: "org.pitest"
   
