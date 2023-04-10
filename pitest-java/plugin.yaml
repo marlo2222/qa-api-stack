@@ -10,8 +10,8 @@ usage: docs/usage.md
 use-case: docs/use-case.md
 implementation: docs/implementation.md
 technologies:
-  - "Java"
-  - "Maven"
+  - Java
+  - Maven
 types:
   - app
 inputs:
@@ -35,8 +35,7 @@ inputs:
     type: int
     name: mutation_coverage
     required: true
-    pattern: "\b([1-9]|[1-9][0-9])\b"
-  - label: Gostaria de definir os targetClass e targetTests?(opcional)
+  - label: Gostaria de definir os targetClass e targetTests?
     type: bool
     name: target
     default: false
@@ -45,15 +44,27 @@ inputs:
     name: targetClass
     required: true
     condition:
-      variable: target
-      operator: "=="
+      variable: pacotes
+      operator: ==
       value: true
   - label: Informe o pacote dos testes unitarios...
     type: text
     name: targetTests
     required: true
     condition:
-      variable: target
-      operator: "=="
+      variable: pacotes
+      operator: ==
       value: true
+
+hooks:
+  - type: edit
+    trigger: after-render
+    path: pom.xml
+    changes:
+      - search:
+          string: plugins
+          insert-after:
+            snippet: snippets/plugin.txt
+
+
   
