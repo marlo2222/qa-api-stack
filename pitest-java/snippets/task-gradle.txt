@@ -1,0 +1,13 @@
+pitest {
+    targetTests   = ['{{ targetTests }}']
+    targetClasses = ['{{ targetClass }}']
+    threads = 4
+    outputFormats = ['XML', 'HTML']
+    mutators = ['{{ mutantes_group }}']
+    timestampedReports = true
+    avoidCallsTo = ['{{ lib_log }}']
+    mutationThreshold = {{ mutation_coverage }}
+    if (project.name in ['module-without-any-test']) {
+        failWhenNoMutations = false
+    }
+}

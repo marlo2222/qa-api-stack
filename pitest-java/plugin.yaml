@@ -22,6 +22,7 @@ inputs:
     items:
       - Maven
       - Gradle
+
   - label: Qual lib de logs utilizada no projeto?
     type: text
     name: lib_log
@@ -31,40 +32,68 @@ inputs:
       - org.apache.log4j
       - org.slf4j
       - org.apache.commons.logging
+
   - label: Qual cobertura de mutantes esperada?(1% a 99%)
     type: int
     name: mutation_coverage
     required: true
-  - label: Gostaria de definir os targetClass e targetTests?
-    type: bool
-    name: target
-    default: false
+
+  - label: Grupo de mutantes a ser utilizado?
+    type: text
+    name: mutantes_group
+    required: true
+    items:
+      - OLD_DEFAULTS
+      - DEFAULTS
+      - STRONGER
+      - ALL
+
   - label: Informe o pacote das classes a serem gerados mutantes...
     type: text
     name: targetClass
     required: true
-    condition:
-      variable: pacotes
-      operator: ==
-      value: true
+
   - label: Informe o pacote dos testes unitarios...
     type: text
     name: targetTests
     required: true
-    condition:
-      variable: pacotes
-      operator: ==
-      value: true
-
+    
 hooks:
   - type: edit
     trigger: after-render
     path: pom.xml
     changes:
       - search:
-          string: plugins
+          string: "/plugins"
+          insert-before:
+            snippet: snippets/plugin-maven.txt
+          when:
+            not-exists-snippet: snippets/plugin-maven.txt
+    condition:
+      variable: gerenciador
+      operator: ==
+      value: Maven
+
+hooks:
+  - type: edit
+    trigger: after-render
+    path: build.gradle
+    changes:
+      - search:
+          string: "plugins"
           insert-after:
-            snippet: snippets/plugin.txt
-
-
+            snippet: snippets/plugin-gradle.txt
+          when:
+            not-exists-snippet: snippets/plugin-gradle.txt
+    changes:
+      - search:
+          string: "test"
+          insert-before:
+            snippet: snippets/task-gradle.txt
+          when:
+            not-exists-snippet: snippets/task-gradle.txt
+    condition:
+      variable: gerenciador
+      operator: ==
+      value: Gradle
   
