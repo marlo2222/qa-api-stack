@@ -79,19 +79,14 @@ hooks:
     trigger: after-render
     path: build.gradle
     changes:
+      - insert:
+          line: -1
+          snippet: snippets/task-gradle.txt
+
       - search:
           string: "plugins"
           insert-after:
             snippet: snippets/plugin-gradle.txt
-          when:
-            not-exists-snippet: snippets/plugin-gradle.txt
-    changes:
-      - search:
-          string: "test"
-          insert-before:
-            snippet: snippets/task-gradle.txt
-          when:
-            not-exists-snippet: snippets/task-gradle.txt
     condition:
       variable: gerenciador
       operator: ==
