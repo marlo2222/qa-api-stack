@@ -1,0 +1,86 @@
+name: k6-script-plugin
+description: Plugin para criação de scripts de testes de performance com k6.
+display-name: k6-script-plugin
+picture: plugin.png
+category: backend
+compatibility:
+  - java
+  - spring
+about: docs/about.md
+usage: docs/usage.md
+use-case: docs/use-case.md
+implementation: docs/implementation.md
+technologies:
+  - "Api"
+types:
+  - app
+inputs:
+  - label: Informe o nome do script
+    type: text
+    name: script_name
+    required: true
+  - label: Informe a quantidade de VUs
+    type: int
+    name: vu
+    required: true
+  - label: Informe a duração em seg
+    type: int
+    name: duration
+    required: true
+  - label: Informe a url para teste
+    type: text
+    name: url
+    required: true
+  - label: Selecione o metodo de teste
+    type: text
+    name: method
+    required: true
+    items:
+      - get
+      - post
+      - put
+      - delete
+  - label: informe o status code esperado
+    type: int
+    name: status_code
+    default: 200
+    required: true
+  - label: Gostaria de definir thresholds/limites ao teste?
+    type: bool
+    name: limites
+    default: false
+    required: true
+  - label: Selecione o percentil de confiança para duração da requisição
+    type: text
+    name: percentil_duracao
+    required: true
+    items:
+      - 90
+      - 95
+    condition:
+      variable: limites
+      operator: ==
+      value: true
+  - label: Informe a duração esperada da requisição em ms
+    type: int
+    name: duracao_requisicao
+    required: true
+    condition:
+      variable: limites
+      operator: ==
+      value: true
+  - label: Selecione a taxa de sucesso para as requisições em %
+    type: text
+    name: taxa_sucesso
+    required: true
+    items:
+      - 90
+      - 95
+      - 99
+    condition:
+      variable: limites
+      operator: ==
+      value: true
+
+global-computed-inputs:
+  app_name: "{{project_name|replace(' ','_')|replace('/','-')|replace('\\\\', '-')}}"
